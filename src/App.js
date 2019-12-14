@@ -8,8 +8,12 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Howl } from 'howler';
 
 // 'ws://localhost:8000'
-const BACKEND = 'ws://' + window.location.hostname + ':8000';
-const client = new W3CWebSocket(BACKEND);
+const URL = window.location.href;
+// with port where necessary
+const BACKEND = 'http://' + window.location.host;
+// add correct socket port
+const SOCKET_BACKEND = 'ws://' + window.location.hostname + ':8000';
+const client = new W3CWebSocket(SOCKET_BACKEND);
 
 // tone stuff
 var note = function(int){
@@ -53,9 +57,6 @@ class App extends Component {
     let note_names = [];
 
     // let player;
-
-
-
     console.log(sounds)
 
     this.state = {
@@ -79,38 +80,40 @@ class App extends Component {
     for(var i=0; i<modes.length; i++){
       for(var x=0; x<9; x++){
 
-        console.log('clfirstcky')
         let note_name = modes[i] + x;
         if(note_name){
+          console.log(BACKEND + "/keypad/" + note_name + ".mp3")
+          let player = new Howl({
+            src: [BACKEND + "/keypad/" + note_name + ".mp3"],
+            // loop: true,
+            // autoplay: true
+          });
+          console.log(player)
+          player.load();
+          sounds[note_name] = player;
 
-            let player = new Howl({
-              src: ["http://localhost:4000/keypad/" + note_name + ".mp3"],
-              // loop: true,
-              // autoplay: true
-            });
-
-            sounds[note_name] = player;
+          note_names.push(note_name);
         }
 
-        // sounds[note_name] = player;
-        note_names.push(note_name);
       }
     }
 
-    // save hte sounds to state
-    this.setState({
-      sounds: sounds
-    }, function(){
+    // // save hte sounds to state
+    // this.setState({
+    //   sounds: sounds
+    // }, function(){
 
-      // this.state.n0.load();  
-      console.log('clicky')
-    })
+    //   // this.state.n0.load();  
+    //   console.log('clicky')
+    // })
 
     this.setState({note_names: note_names, sounds: sounds})
 
 
     client.onopen = () => {
       console.log('WebSocket Client Connectedzz Master');
+      let data = JSON.stringify({url: URL});
+      client.send(data);
     };
 
     client.onmessage = (message) => {
