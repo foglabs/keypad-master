@@ -12,7 +12,10 @@ const URL = window.location.href;
 // with port where necessary
 const BACKEND = 'http://' + window.location.host;
 // add correct socket port
-const SOCKET_BACKEND = 'ws://' + window.location.hostname + ':8000';
+// dev!
+// const SOCKET_BACKEND = 'ws://' + window.location.hostname + ':8000';
+// producto!
+const SOCKET_BACKEND = 'wss://' + window.location.hostname + '/ws-badboy';
 const client = new W3CWebSocket(SOCKET_BACKEND);
 
 // tone stuff
