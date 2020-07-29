@@ -10,7 +10,7 @@ import { Howl } from 'howler';
 // 'ws://localhost:8000'
 const URL = window.location.href;
 // with port where necessary
-const BACKEND = 'http://' + window.location.host;
+const BACKEND = 'https://' + window.location.host;
 // add correct socket port
 // dev!
 // const SOCKET_BACKEND = 'ws://' + window.location.hostname + ':8000';
